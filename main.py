@@ -101,10 +101,18 @@ class AddressBook(UserDict):
         for record in self.data.values():
             if record.birthday:
                 bdate = datetime.strptime(record.birthday.value, "%d.%m.%Y").date()
-                bdate_this_year = bdate.replace(year=today.year)
+                
+                try:
+                    bdate_this_year = bdate.replace(year=today.year)
+                except ValueError:
+                    bdate_this_year = bdate.replace(year=today.year, month=2, day=28)
                 
                 if bdate_this_year < today:
-                    bdate_this_year = bdate_this_year.replace(year=today.year + 1)
+                    try:
+                        bdate_this_year = bdate_this_year.replace(year=today.year + 1)
+                    except ValueError:
+                        
+                        bdate_this_year = bdate_this_year.replace(year=today.year + 1, month=2, day=28)
                     
                 days_until = (bdate_this_year - today).days
                 
